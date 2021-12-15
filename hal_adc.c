@@ -165,8 +165,6 @@ wiced_result_t
 sample_adc_app_management_cback(wiced_bt_management_evt_t event,
                                 wiced_bt_management_evt_data_t *p_event_data)
 {
-    wiced_result_t result = WICED_SUCCESS;
-
     WICED_BT_TRACE("Received Event : %d\n\n\r", event);
 
     switch(event)
@@ -180,22 +178,12 @@ sample_adc_app_management_cback(wiced_bt_management_evt_t event,
          * Configure seconds periodic timer and start timer with
          * APP_TIMEOUT_IN_SECONDS
          */
-        if(WICED_SUCCESS == wiced_init_timer(&seconds_timer,
-                                             seconds_app_timer_cb,
-                                             0,
-                                             WICED_SECONDS_PERIODIC_TIMER))
-        {
-            if(WICED_SUCCESS != wiced_start_timer(&seconds_timer,
-                                                  APP_TIMEOUT_IN_SECONDS))
-            {
-                WICED_BT_TRACE("Seconds Timer Error\n\r");
-                result = WICED_ERROR;
-            }
-        }
-        else
-        {
-            result = WICED_ERROR;
-        }
+        wiced_init_timer(&seconds_timer,
+                         seconds_app_timer_cb,
+                         0,
+                         WICED_SECONDS_PERIODIC_TIMER);
+        wiced_start_timer(&seconds_timer,
+                          APP_TIMEOUT_IN_SECONDS);
         break;
 
     default:
@@ -203,7 +191,7 @@ sample_adc_app_management_cback(wiced_bt_management_evt_t event,
         break;
     }
 
-    return result;
+    return WICED_SUCCESS;
 }
 
 /*

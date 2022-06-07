@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -212,7 +212,9 @@ static void seconds_app_timer_cb(uint32_t arg)
 
     adc_readings(ADC_INPUT_P0, GET_VARIABLE_NAME(ADC_INPUT_P0));
     adc_readings(ADC_INPUT_ADC_BGREF, GET_VARIABLE_NAME(ADC_INPUT_ADC_BGREF));
+    #ifdef ADC_INPUT_VDDIO
     adc_readings(ADC_INPUT_VDDIO, GET_VARIABLE_NAME(ADC_INPUT_VDDIO));
+    #endif
     adc_readings(ADC_INPUT_VDD_CORE, GET_VARIABLE_NAME(ADC_INPUT_VDD_CORE));
 
 }
@@ -244,7 +246,7 @@ static void adc_readings(ADC_INPUT_CHANNEL_SEL channel, char* channel_name)
      * as an argument
      */
     voltage_val = wiced_hal_adc_read_voltage(channel);
-#ifdef CYW20706A2
+#if defined(CYW20706A2) || defined(CYW43012C0)
     sign_raw_val = wiced_hal_adc_read_raw_sample(channel);
 #else
     sign_raw_val = wiced_hal_adc_read_raw_sample(channel, AVG_NUM_OF_SAMPLES);
